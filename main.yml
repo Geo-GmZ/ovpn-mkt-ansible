@@ -1,0 +1,57 @@
+- hosts: mikrotik
+  gather_facts: no
+  vars_prompt:
+    - name: sys_identity
+      prompt: What's the router's name (identity)?
+      private: no
+
+    - name: dns1
+      prompt: What's the primary DNS?
+      private: no
+
+    - name: dns2
+      prompt: What's the secondary DNS?
+      private: no
+
+    - name: LAN
+      prompt: What's the LAN subnet ie; 192.168.0.0/24?
+      private: no
+
+    - name: CA
+      prompt: What's the CA name?
+      private: no
+
+    - name: pool_name
+      prompt: What's the pool name?
+      private: no
+
+    - name: pool_beginning
+      prompt: First IP on the pool for clients?
+      private: no
+
+    - name: pool_end
+      prompt: Last IP on the pool for clients?
+      private: no
+
+   - name: vpn_gw
+     prompt: What's the VPN Gateway? (it must be out of the pool range)
+     private: no
+
+   - name: vpn_port
+     prompt: What's the VPN port? default is 1194. 
+     private: no
+
+   - name: vpn_user
+     prompt: What's the user?
+     private: no
+
+   - name: vpn_password
+     prompt: What's the password?    
+     private: yes
+
+  roles: 
+    - set_system
+    - cert_gen
+    - vpn_pool
+    - vpn_user
+   

@@ -1,0 +1,11 @@
+---
+# tasks file for vpn_pool
+
+- name: Create CA Certificate.
+  routeros_command:
+    commands: 
+        - /ip pool add name={{ pool_name }} ranges={{ pool_beginning }}-{{ pool_end }}
+        - /ppp profile add dns-server={{ vpn_gw }} local-address={{ vpn_gw }} name={{ pool_name }} remote-address={{ pool_name }} use-encryption=yes
+        - /interface ovpn-server server set auth=sha1 certificate={{ sys_identity }} cipher=aes128,aes192,aes256 default-profile={{ pool_name }} mode=ip netmask=24 port={{ vpn_port }} enabled=yes require-client-certificate=yes
+
+

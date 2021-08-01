@@ -1,0 +1,18 @@
+---
+# tasks file for cert_gen
+
+- name: Create CA Certificate.
+  routeros_command:
+    commands:
+        - /certificate add name=ca-template common-name={{ CA }} days-valid=3650 key-usage=crl-sign,key-cert-sign sign ca-template ca-crl-host=127.0.0.1 name={{ CA }}
+  
+- name: Create Server Certificate.
+  routeros_command:
+    commands:
+        - /certificate add name=server-template common-name={{ sys_identity }} days-valid=3650 key-usage=digital-signature,key-encipherment,tls-server sign server-template ca={{ CA }} name={{ sys_identity }}
+
+- name: Create Client Template for later.
+  routeros_command:
+    commands:
+        - /certificate add name=client-template common-name=client days-valid=3650 key-usage=tls-client
+

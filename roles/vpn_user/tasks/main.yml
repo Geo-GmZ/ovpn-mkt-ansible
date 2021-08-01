@@ -1,0 +1,11 @@
+---
+# tasks file for vpn_user
+- name: Create and Export Client Certificates.
+  routeros_command:
+    commands: 
+        - /ppp secret add name={{ vpn_user }} password={{ vpn_password }} profile={{ pool_name }} service=ovpn
+        - /certificate add name=client-template-to-issue copy-from=client-template common-name={{ vpn_user }} sign client-template-to-issue ca={{ CA }} name={{ vpn_user }}
+        - /certificate export-certificate {{ CA }}
+        - /certificate export-passphrase="" export-certificate {{ vpn_user }} export-passphrase={{ vpn_password }}
+
+## Done. You will find the created certificates in Files.

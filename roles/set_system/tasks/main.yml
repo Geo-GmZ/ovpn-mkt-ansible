@@ -1,0 +1,29 @@
+---
+# tasks file for set_system
+
+- name: Set System Identity.
+  routeros_command:
+    commands:
+        - /system identity set name={{ sys_identity }}
+
+- name: configure WAN interfaces
+  routeros_command:
+    commands:
+       - /interface list add name=WAN
+       - /interface list member add interface=ether1 list=WAN
+
+- name: set NTP servers
+  routeros_command:
+    commands:
+        - /system ntp client set enabled=yes server-dns-name=0.north-america.pool.ntp.org,1.north-america.pool.ntp.org,2.north-america.pool.ntp.org
+
+- name: add DNS servers to routerOS
+  routeros_command:
+    commands:
+        - /ip dns set allow-remote-requests=yes servers={{ dns1 }},{{ dns2 }}
+        - /ip dns static add address={{ vpn_gw }} name={{ sys_identity }}
+
+- name: configuring NAT
+  routeros_command:
+    commands:
+       - /ip firewall nat add action=masquerade chain=srcnat out-interface-list=WAN        
